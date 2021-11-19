@@ -1,0 +1,45 @@
+version: '3'
+services:
+  vue:
+    build:
+      context: ./docker/vue
+    container_name: deploypractice-vue
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/app
+    working_dir: /app
+    tty: true
+    environment:
+      VUE_APP_API_ENDPOINT: http://localhost:3000
+    command: sh -c "cd assets && yarn install && yarn serve"
+
+  go:
+    build:
+      context: ./docker/go
+    container_name: deploypractice-go
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/go/src
+    working_dir: /go/src/app
+    tty: true
+    command: /bin/bash -c "go run main.go"
+
+  db:
+    image: mysql:5.7
+    container_name: deploypractice-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ROOTPASSWORD}
+      MYSQL_DATABASE: deploypractice
+      MYSQL_USER: ${MYSQLUSER}
+      MYSQL_PASSWORD: ${MYSQLPASSWORD}
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+volumes:
+  db-data:
+    driver: local
