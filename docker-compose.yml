@@ -2,7 +2,7 @@ version: '3'
 services:
   vue:
     build:
-      context: ./Dockerfile.go
+      context: ./docker/go
     container_name: deploypractice-vue
     ports:
       - 8080:8080
@@ -16,7 +16,7 @@ services:
 
   go:
     build:
-      context: ./Dockerfile.frontend
+      context: ./docker/vue
     container_name: deploypractice-go
     ports:
       - 3000:3000
