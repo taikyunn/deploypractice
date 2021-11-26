@@ -15,9 +15,12 @@ PROTOCOL := "tcp(mydqlのコンテナ名:mysqlコンテナポート番号)"
 docker: 3000:3000
 main.go: r.Run(":3000")
 
+3.gormの接続設定をenvファイルの変更させる
+
+
 2.Docker+go+mysql+vueにて簡単なTodoアプリを作成
 
-3.Herokuデプロイ
+
 
 4.AWSデプロイ
 

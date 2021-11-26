@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"log"
+	"os"
 	"strconv"
 	"time"
 
@@ -8,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+	"github.com/joho/godotenv"
 )
 
 type Todo struct {
@@ -16,13 +20,20 @@ type Todo struct {
 }
 
 func gormConnect() *gorm.DB {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error Loading .env file")
+	}
+
+	USER := os.Getenv("API_USER")
+	PASS := os.Getenv("API_PASS")
+	ADDRESS := os.Getenv("API_ADDRESS")
 	DBMS := "mysql"
-	USER := "test_user"
-	PASS := "test_user"
-	// コンテナ名:ポート番号を指定する
-	PROTOCOL := "tcp(deploypractice-mysql:3306)"
 	DBNAME := "deploypractice"
-	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME + "?charset=utf8&parseTime=true&loc=Asia%2FTokyo"
+
+	// コンテナ名:ポート番号を指定する
+	CONNECT := USER + ":" + PASS + "@tcp(" + ADDRESS + ":3306)" + "/" + DBNAME + "?charset=utf8&parseTime=true&loc=Asia%2FTokyo"
+
 	db, err := gorm.Open(DBMS, CONNECT)
 
 	if err != nil {
